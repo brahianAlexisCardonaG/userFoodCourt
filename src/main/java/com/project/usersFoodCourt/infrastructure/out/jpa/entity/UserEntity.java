@@ -40,7 +40,7 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "role_id", nullable = false,
             foreignKey = @ForeignKey(name = "fk_users_roles"))
     private RoleEntity role;

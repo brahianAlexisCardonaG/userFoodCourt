@@ -2,6 +2,7 @@ package com.project.usersFoodCourt.infrastructure.input.rest;
 
 import com.project.usersFoodCourt.application.dto.request.UserAuthenticateRequestDto;
 import com.project.usersFoodCourt.application.dto.request.UserRegisterRequestDto;
+import com.project.usersFoodCourt.application.dto.response.UserRoleResponseDto;
 import com.project.usersFoodCourt.application.handler.IUserHandler;
 import com.project.usersFoodCourt.domain.model.response.AuthenticationResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,10 +11,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 @RestController
@@ -42,5 +40,17 @@ public class UserRestController {
             @RequestBody UserAuthenticateRequestDto userAuthenticateRequestDto
     ) {
         return ResponseEntity.ok(iUserHandler.authenticateUser(userAuthenticateRequestDto));
+    }
+
+    @Operation(summary = "User found")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "user found", content = @Content),
+            @ApiResponse(responseCode = "409", description = "user not found", content = @Content)
+    })
+    @GetMapping("/user")
+    public ResponseEntity<UserRoleResponseDto> getUserById(
+            @RequestParam Long userId
+    ) {
+        return ResponseEntity.ok(iUserHandler.getUserById(userId));
     }
 }

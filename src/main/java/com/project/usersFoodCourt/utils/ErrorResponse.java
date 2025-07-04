@@ -1,4 +1,4 @@
-package com.project.usersFoodCourt.domain.model.response;
+package com.project.usersFoodCourt.utils;
 
 import lombok.Builder;
 import lombok.Data;

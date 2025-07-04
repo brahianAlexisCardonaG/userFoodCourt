@@ -70,4 +70,44 @@ class UserJpaAdapterTest {
 
         assertFalse(result.isPresent());
     }
+
+    @Test
+    void findById_ShouldReturnUser_WhenUserExists() {
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userEntity));
+        when(userEntityMapper.toUserModel(userEntity)).thenReturn(userModel);
+
+        Optional<UserModel> result = userJpaAdapter.findById(1L);
+
+        assertTrue(result.isPresent());
+        assertEquals(userModel, result.get());
+    }
+
+    @Test
+    void findById_ShouldReturnEmpty_WhenUserNotExists() {
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        Optional<UserModel> result = userJpaAdapter.findById(1L);
+
+        assertFalse(result.isPresent());
+    }
+
+    @Test
+    void findByDocument_ShouldReturnUser_WhenUserExists() {
+        when(userRepository.findByDocumentNumber("12345678")).thenReturn(Optional.of(userEntity));
+        when(userEntityMapper.toUserModel(userEntity)).thenReturn(userModel);
+
+        Optional<UserModel> result = userJpaAdapter.findByDocument("12345678");
+
+        assertTrue(result.isPresent());
+        assertEquals(userModel, result.get());
+    }
+
+    @Test
+    void findByDocument_ShouldReturnEmpty_WhenUserNotExists() {
+        when(userRepository.findByDocumentNumber("12345678")).thenReturn(Optional.empty());
+
+        Optional<UserModel> result = userJpaAdapter.findByDocument("12345678");
+
+        assertFalse(result.isPresent());
+    }
 }
