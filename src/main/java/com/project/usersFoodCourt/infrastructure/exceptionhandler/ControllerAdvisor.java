@@ -1,7 +1,7 @@
 package com.project.usersFoodCourt.infrastructure.exceptionhandler;
 
 import com.project.usersFoodCourt.domain.exception.BaseException;
-import com.project.usersFoodCourt.domain.model.response.ErrorResponse;
+import com.project.usersFoodCourt.utils.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

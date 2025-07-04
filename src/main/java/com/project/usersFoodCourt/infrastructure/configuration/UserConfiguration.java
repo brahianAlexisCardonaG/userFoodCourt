@@ -11,6 +11,7 @@ import com.project.usersFoodCourt.infrastructure.out.jpa.mapper.IRoleEntityMappe
 import com.project.usersFoodCourt.infrastructure.out.jpa.mapper.IUserEntityMapper;
 import com.project.usersFoodCourt.infrastructure.out.jpa.repository.IRoleRepository;
 import com.project.usersFoodCourt.infrastructure.out.jpa.repository.IUserRepository;
+import com.project.usersFoodCourt.utils.GenericValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,6 +35,7 @@ public class UserConfiguration {
     private final IRoleEntityMapper roleEntityMapper;
     private final IRoleRepository roleRepository;
 
+
     @Bean
     public IUserPersistencePort userPersistencePort() {
         return new UserJpaAdapter(userRepository, userEntityMapper);
@@ -48,13 +50,15 @@ public class UserConfiguration {
     public IUserServicePort userServicePort(
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
-            AuthenticationManager authenticationManager
+            AuthenticationManager authenticationManager,
+            GenericValidation genericValidation
     ) {
         return new UserUseCase(passwordEncoder,
                 userPersistencePort(),
                 jwtService,
                 authenticationManager,
-                rolePersistencePort()
+                rolePersistencePort(),
+                genericValidation
                 );
     }
 

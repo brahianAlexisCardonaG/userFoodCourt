@@ -9,7 +9,9 @@ public enum ErrorCatalog {
     INVALID_USER("ERR_USER_002", "Invalid user parameters."),
     GENERIC_ERROR("ERR_GEN_001", "An unexpected error occurred."),
     ROLE_ID_NOT_FOUND("ERR_ROLE_001", "Role not found."),
-    USER_UNDERAGE("ERR_USER_003", "User must be of legal age.");
+    USER_UNDERAGE("ERR_USER_003", "User must be of legal age."),
+    USER_EMAIL_ALREADY_EXISTS("ERR_USER_004", "Email already exists."),
+    USER_DOCUMENT_ALREADY_EXISTS("ERR_USER_005", "Document already exists.");
 
     private final String code;
     private final String message;
