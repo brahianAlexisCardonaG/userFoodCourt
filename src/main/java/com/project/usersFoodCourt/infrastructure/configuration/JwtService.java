@@ -1,5 +1,6 @@
 package com.project.usersFoodCourt.infrastructure.configuration;
 
+import com.project.usersFoodCourt.domain.model.util.DomainUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -38,6 +39,10 @@ public class JwtService {
         extraClaims.put("roles", userDetails.getAuthorities().stream()
                 .map(authority -> authority.getAuthority().replace("ROLE_", ""))
                 .toList());
+        
+        if (userDetails instanceof DomainUserDetails domainUserDetails) {
+            extraClaims.put("userId", domainUserDetails.getUserId());
+        }
 
         return generateToken(extraClaims, userDetails);
     }

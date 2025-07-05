@@ -6,7 +6,7 @@ import com.project.usersFoodCourt.application.dto.response.UserRoleResponseDto;
 import com.project.usersFoodCourt.domain.model.response.AuthenticationResponse;
 
 public interface IUserHandler {
-    AuthenticationResponse registerUser(UserRegisterRequestDto userRegisterRequestDto);
+    AuthenticationResponse registerUserWithRole(UserRegisterRequestDto userRegisterRequestDto, String currentUserRole);
     AuthenticationResponse authenticateUser(UserAuthenticateRequestDto userAuthenticateRequestDto);
     UserRoleResponseDto getUserById(Long userId);
 }

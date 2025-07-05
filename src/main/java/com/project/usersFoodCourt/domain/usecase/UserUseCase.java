@@ -11,6 +11,7 @@ import com.project.usersFoodCourt.domain.spi.IUserPersistencePort;
 import com.project.usersFoodCourt.infrastructure.configuration.JwtService;
 import com.project.usersFoodCourt.utils.ErrorCatalog;
 import com.project.usersFoodCourt.utils.GenericValidation;
+import com.project.usersFoodCourt.domain.usecase.util.PermissionsRoles;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,21 +29,25 @@ public class UserUseCase implements IUserServicePort {
     private final AuthenticationManager authenticationManager;
     private final IRolePersistencePort rolePersistencePort;
     private final GenericValidation genericValidation;
+    private final PermissionsRoles permissionsRoles;
 
     @Override
-    public AuthenticationResponse registerUser(UserModel userModel) {
+    public AuthenticationResponse registerUserWithRoleValidation(UserModel userModel, String currentUserRole) {
 
         Optional<RoleModel> roleModel = rolePersistencePort.findByRoleId(userModel.getRole().getId());
         genericValidation.validateCondition(roleModel.isEmpty(), ErrorCatalog.ROLE_ID_NOT_FOUND);
         genericValidation.validateCondition(userModel
                 .getBirthDate()
-                .isAfter(LocalDate.now()), ErrorCatalog.USER_UNDERAGE);
+                .isAfter(LocalDate.now().minusYears(18)), ErrorCatalog.USER_UNDERAGE);
         genericValidation.validateCondition(userPersistencePort
                 .findByEmail(userModel.getEmail())
                 .isPresent(), ErrorCatalog.USER_EMAIL_ALREADY_EXISTS);
         genericValidation.validateCondition(userPersistencePort
                 .findByDocument(userModel.getDocumentNumber())
                 .isPresent(), ErrorCatalog.USER_DOCUMENT_ALREADY_EXISTS);
+
+        // Validar permisos de creación de roles
+        permissionsRoles.validateRoleCreationPermissions(roleModel.get().getName(), currentUserRole);
 
         userModel.setRole(roleModel.get());
         userModel.setPassword(passwordEncoder.encode(userModel.getPassword()));
@@ -55,6 +60,8 @@ public class UserUseCase implements IUserServicePort {
         authenticationResponse.setAccessToken(jwtToken);
         return authenticationResponse;
     }
+
+
 
     @Override
     public AuthenticationResponse authenticateUser(UserModel userModel) {

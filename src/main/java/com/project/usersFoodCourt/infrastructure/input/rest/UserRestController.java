@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,8 +27,17 @@ public class UserRestController {
             @ApiResponse(responseCode = "409", description = "user already exists", content = @Content)
     })
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> registerUser(@Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto) {
-        return ResponseEntity.ok(iUserHandler.registerUser(userRegisterRequestDto));
+    public ResponseEntity<AuthenticationResponse> registerUser(
+            @Valid @RequestBody UserRegisterRequestDto userRegisterRequestDto,
+            Authentication authentication) {
+        
+        String currentUserRole = null;
+        if (authentication != null && authentication.isAuthenticated() && 
+            !"anonymousUser".equals(authentication.getPrincipal())) {
+            currentUserRole = authentication.getAuthorities().iterator().next().getAuthority().replace("ROLE_", "");
+        }
+        
+        return ResponseEntity.ok(iUserHandler.registerUserWithRole(userRegisterRequestDto, currentUserRole));
     }
 
     @Operation(summary = "User Logged")

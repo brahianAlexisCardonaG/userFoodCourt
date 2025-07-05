@@ -5,6 +5,7 @@ import com.project.usersFoodCourt.domain.model.util.DomainUserDetails;
 import com.project.usersFoodCourt.domain.spi.IRolePersistencePort;
 import com.project.usersFoodCourt.domain.spi.IUserPersistencePort;
 import com.project.usersFoodCourt.domain.usecase.UserUseCase;
+import com.project.usersFoodCourt.domain.usecase.util.PermissionsRoles;
 import com.project.usersFoodCourt.infrastructure.out.jpa.adapter.RoleJpaAdapter;
 import com.project.usersFoodCourt.infrastructure.out.jpa.adapter.UserJpaAdapter;
 import com.project.usersFoodCourt.infrastructure.out.jpa.mapper.IRoleEntityMapper;
@@ -51,14 +52,16 @@ public class UserConfiguration {
             PasswordEncoder passwordEncoder,
             JwtService jwtService,
             AuthenticationManager authenticationManager,
-            GenericValidation genericValidation
+            GenericValidation genericValidation,
+            PermissionsRoles permissionsRoles
     ) {
         return new UserUseCase(passwordEncoder,
                 userPersistencePort(),
                 jwtService,
                 authenticationManager,
                 rolePersistencePort(),
-                genericValidation
+                genericValidation,
+                permissionsRoles
                 );
     }
 

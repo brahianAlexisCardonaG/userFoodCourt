@@ -26,4 +26,5 @@ CREATE TABLE users (
 INSERT INTO roles (name, description) VALUES
 ('ADMIN', 'Administrator role with full permissions'),
 ('OWNER', 'Owner role with management permissions'),
-('CLIENT', 'Client role with basic permissions');
+('CLIENT', 'Client role with basic permissions'),
+('EMPLOYEE', 'Employee role with basic permissions');
