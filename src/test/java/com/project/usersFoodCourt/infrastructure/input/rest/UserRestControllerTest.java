@@ -67,7 +67,7 @@ class UserRestControllerTest {
 
     @Test
     void registerUser_ShouldReturnAuthenticationResponse() throws Exception {
-        when(userHandler.registerUser(any(UserRegisterRequestDto.class))).thenReturn(authResponse);
+        when(userHandler.registerUserWithRole(any(UserRegisterRequestDto.class), any())).thenReturn(authResponse);
 
         mockMvc.perform(post("/api/v1/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)

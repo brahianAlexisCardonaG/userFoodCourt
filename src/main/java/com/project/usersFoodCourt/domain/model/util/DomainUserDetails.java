@@ -12,6 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 public class DomainUserDetails implements UserDetails {
     private final UserModel user;
+    
+    public Long getUserId() {
+        return user.getId();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

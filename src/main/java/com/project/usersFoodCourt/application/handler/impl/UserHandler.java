@@ -22,8 +22,9 @@ public class UserHandler implements IUserHandler {
     private final IUserResponseMapper iUserResponseMapper;
 
     @Override
-    public AuthenticationResponse registerUser(UserRegisterRequestDto userRegisterRequestDto) {
-        return iUserServicePort.registerUser(iUserRequestMapper.toUserRegisterModel(userRegisterRequestDto));
+    public AuthenticationResponse registerUserWithRole(UserRegisterRequestDto userRegisterRequestDto, String currentUserRole) {
+        return iUserServicePort.registerUserWithRoleValidation(
+            iUserRequestMapper.toUserRegisterModel(userRegisterRequestDto), currentUserRole);
     }
 
     @Override

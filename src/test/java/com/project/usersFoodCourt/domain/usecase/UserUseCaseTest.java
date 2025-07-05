@@ -9,6 +9,7 @@ import com.project.usersFoodCourt.domain.spi.IUserPersistencePort;
 import com.project.usersFoodCourt.infrastructure.configuration.JwtService;
 import com.project.usersFoodCourt.utils.ErrorCatalog;
 import com.project.usersFoodCourt.utils.GenericValidation;
+import com.project.usersFoodCourt.domain.usecase.util.PermissionsRoles;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,6 +48,8 @@ class UserUseCaseTest {
     private IRolePersistencePort rolePersistencePort;
     @Mock
     private GenericValidation genericValidation;
+    @Mock
+    private PermissionsRoles permissionsRoles;
 
     @InjectMocks
     private UserUseCase userUseCase;
@@ -76,7 +79,7 @@ class UserUseCaseTest {
         when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
         when(jwtService.generateToken(any())).thenReturn("jwt-token");
 
-        AuthenticationResponse result = userUseCase.registerUser(userModel);
+        AuthenticationResponse result = userUseCase.registerUserWithRoleValidation(userModel, null);
 
         assertNotNull(result);
         assertEquals("jwt-token", result.getAccessToken());
@@ -91,7 +94,7 @@ class UserUseCaseTest {
             .when(genericValidation).validateCondition(eq(true), eq(ErrorCatalog.ROLE_ID_NOT_FOUND));
 
         BusinessException exception = assertThrows(BusinessException.class, 
-            () -> userUseCase.registerUser(userModel));
+            () -> userUseCase.registerUserWithRoleValidation(userModel, null));
 
         assertEquals(ErrorCatalog.ROLE_ID_NOT_FOUND, exception.getErrorCatalog());
         verify(userPersistencePort, never()).save(any());
@@ -105,7 +108,7 @@ class UserUseCaseTest {
             .when(genericValidation).validateCondition(eq(true), eq(ErrorCatalog.USER_UNDERAGE));
 
         BusinessException exception = assertThrows(BusinessException.class, 
-            () -> userUseCase.registerUser(userModel));
+            () -> userUseCase.registerUserWithRoleValidation(userModel, null));
 
         assertEquals(ErrorCatalog.USER_UNDERAGE, exception.getErrorCatalog());
         verify(userPersistencePort, never()).save(any());
@@ -119,7 +122,7 @@ class UserUseCaseTest {
             .when(genericValidation).validateCondition(eq(true), eq(ErrorCatalog.USER_EMAIL_ALREADY_EXISTS));
 
         BusinessException exception = assertThrows(BusinessException.class, 
-            () -> userUseCase.registerUser(userModel));
+            () -> userUseCase.registerUserWithRoleValidation(userModel, null));
 
         assertEquals(ErrorCatalog.USER_EMAIL_ALREADY_EXISTS, exception.getErrorCatalog());
         verify(userPersistencePort, never()).save(any());
@@ -134,7 +137,7 @@ class UserUseCaseTest {
             .when(genericValidation).validateCondition(eq(true), eq(ErrorCatalog.USER_DOCUMENT_ALREADY_EXISTS));
 
         BusinessException exception = assertThrows(BusinessException.class, 
-            () -> userUseCase.registerUser(userModel));
+            () -> userUseCase.registerUserWithRoleValidation(userModel, null));
 
         assertEquals(ErrorCatalog.USER_DOCUMENT_ALREADY_EXISTS, exception.getErrorCatalog());
         verify(userPersistencePort, never()).save(any());
