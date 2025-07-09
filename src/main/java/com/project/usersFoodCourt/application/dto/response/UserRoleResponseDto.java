@@ -13,9 +13,6 @@ public class UserRoleResponseDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private String documentNumber;
     private String phone;
-    private LocalDate birthDate;
-    private String email;
     private RoleResponse role;
 }
